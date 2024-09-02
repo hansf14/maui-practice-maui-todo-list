@@ -8,7 +8,9 @@ namespace maui_todo_list.ViewModel
   {
     public MainViewModel()
     {
-      items = new ObservableCollection<string>();
+      //items = new ObservableCollection<string>();
+      items = [];
+      text = string.Empty;
     }
 
     [ObservableProperty]
@@ -33,10 +35,29 @@ namespace maui_todo_list.ViewModel
     [RelayCommand]
     void Delete(string s)
     {
-      if (Items.Contains(s))
-      {
-        Items.Remove(s);
-      }
+      // 'Items'은(는) 여기에서 null이 아닙니다.
+      // CA1868:'Collection.Contains(string)'(으)로 'Collection.Remove(string)'을(를) 보호하지 마세요.
+      //if (Items.Contains(s))
+      //{
+      //  Items.Remove(s);
+      //}
+
+      Items.Remove(s);
+    }
+
+    [RelayCommand]
+    async Task Tap(string s)
+    {
+      //await Shell.Current.GoToAsync(nameof(DetailPage));
+
+      await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Text={s}");
+
+      //await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Text={s}",
+      //  new Dictionary<string, object>
+      //  {
+      //    { nameof(DetailPage), new object()}
+      //  }
+      // );
     }
   }
 }
