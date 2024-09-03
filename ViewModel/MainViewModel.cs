@@ -6,11 +6,14 @@ namespace maui_todo_list.ViewModel
 {
   public partial class MainViewModel : ObservableObject
   {
-    public MainViewModel()
+    IConnectivity connectivity;
+
+    public MainViewModel(IConnectivity connectivity)
     {
       //items = new ObservableCollection<string>();
       items = [];
       text = string.Empty;
+      this.connectivity = connectivity;
     }
 
     [ObservableProperty]
@@ -20,12 +23,19 @@ namespace maui_todo_list.ViewModel
     string text;
 
     [RelayCommand]
-    void Add()
+    async Task Add()
     {
       if (string.IsNullOrWhiteSpace(Text))
       {
         return;
       }
+
+      if (connectivity.NetworkAccess != NetworkAccess.Internet)
+      {
+        await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
+        return;
+      }
+
       // Add our item
       Items.Add(Text);
 
